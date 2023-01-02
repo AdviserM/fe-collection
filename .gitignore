@@ -141,4 +141,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 .idea
-*.7z
+zip@key2

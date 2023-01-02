@@ -56,7 +56,3 @@ const treeForEachDFS = (tree,callback) => {
     // callback(node)
   }
 }
-
-treeForEachDFS(tree,(node) => {
-  console.log(node)
-})
