@@ -13,14 +13,14 @@
  * @param id 节点 id
  * @param pid 节点的父id
  */
-export function listToTree(list = [],id = 'id',pid = 'pid') {
+export function listToTree(list = [], id = 'id', pid = 'pid') {
   // 先存一份
   const info = list.reduce((map, cur) => {
     cur.children = []
     const key = cur[id]
     map[key] = cur
     return map
-  },{})
+  }, {})
   return list.filter(node => {
     const key = node[pid]
     info[key] && info[key]['children'].push(node)
@@ -41,14 +41,14 @@ export function treeForEach(tree, callback, config = {childrenField: 'children'}
   if (typeof callback !== 'function') {
     throw new Error('callback must be a function')
   }
-  const {childrenField} = Object.assign(defaultConfig,config)
-  const dfs = (treeData,level = 0) => {
+  const {childrenField} = Object.assign(defaultConfig, config)
+  const dfs = (treeData, level = 0) => {
     for (const node of treeData) {
       if (typeof callback === 'function') {
-        callback(node,level)
+        callback(node, level)
       }
       if (node[childrenField] && node[childrenField].length) {
-        dfs(node[childrenField],level + 1)
+        dfs(node[childrenField], level + 1)
       }
     }
     return treeData
@@ -56,7 +56,10 @@ export function treeForEach(tree, callback, config = {childrenField: 'children'}
   return dfs(tree)
 }
 
-export const treeFind = (tree,callback,config) => {
+/*
+* 遍历查找树节点
+* */
+export const treeFind = (tree, callback, config) => {
   const defaultConfig = {
     keyField: 'id',
     childrenField: 'children'
@@ -64,13 +67,13 @@ export const treeFind = (tree,callback,config) => {
   if (typeof callback !== 'function') {
     throw new Error('callback must be a function')
   }
-  const {childrenField} = Object.assign(defaultConfig,config)
-  const dfs = (treeData,level = 0) => {
+  const {childrenField} = Object.assign(defaultConfig, config)
+  const dfs = (treeData, level = 0) => {
     for (const node of treeData) {
-      if (callback(node,level)) {
+      if (callback(node, level)) {
         return node
       } else if (node[childrenField] && node[childrenField].length) {
-        return dfs(node[childrenField],level+ 1)
+        return dfs(node[childrenField], level + 1)
       }
     }
   }
@@ -98,11 +101,11 @@ export function findTreeNode(tree, callback, config) {
         stacks.push(node)
         while (stacks.length) {
           const nodeItem = stacks.pop()
-          if(callback(nodeItem)) {
+          if (callback(nodeItem)) {
             ans.push(nodeItem)
           }
           const children = nodeItem[childrenField] || []
-          for(let i = children.length - 1; i >= 0; i--) {
+          for (let i = children.length - 1; i >= 0; i--) {
             stacks.push(children[i])
           }
         }
@@ -117,7 +120,7 @@ export function findTreeNode(tree, callback, config) {
 /*
 *  搜索满足条件的路径
 * */
-export function findTreePath(tree,callback,config) {
+export function findTreePath(tree, callback, config) {
   const defaultConfig = {
     keyField: 'id',
     childrenField: 'children'
@@ -126,14 +129,14 @@ export function findTreePath(tree,callback,config) {
     throw new Error('callback must be a function')
   }
   config = typeof config === 'object' ? config : {}
-  const { childrenField } = Object.assign(defaultConfig, config)
-  const dfs = (treeData,path = []) => {
+  const {childrenField} = Object.assign(defaultConfig, config)
+  const dfs = (treeData, path = []) => {
     for (const node of treeData) {
       path.push(node)
-      if(callback(node)) return path
-      if(node[childrenField] && node[childrenField].length) {
-        const findChildren = dfs(node[childrenField],path)
-        if(findChildren && findChildren.length) return findChildren
+      if (callback(node)) return path
+      if (node[childrenField] && node[childrenField].length) {
+        const findChildren = dfs(node[childrenField], path)
+        if (findChildren && findChildren.length) return findChildren
       }
       path.pop()
     }
@@ -144,14 +147,14 @@ export function findTreePath(tree,callback,config) {
 /*
 * 树转列表
 * */
-export function tree2List(tree = [],config) {
+export function tree2List(tree = [], config) {
   const ans = []
-  treeForEach(tree,(node,level) => {
+  treeForEach(tree, (node, level) => {
     ans.push({
       ...node,
       level
     })
-  },config)
+  }, config)
   return ans
 }
 
@@ -183,7 +186,15 @@ export function objectFilter(obj = {}, filter = []) {
   } else {
     return obj
   }
-
+}
+/*
+*  是否是空对象
+* */
+export function isEmptyObject(target) {
+  if (myTypeOf(target !== 'object')) {
+    throw new Error('type error')
+  }
+  return Object.keys().length === 0
 }
 
 // 检测数据类型

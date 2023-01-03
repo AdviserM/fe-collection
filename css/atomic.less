@@ -3,3 +3,44 @@
   box-sizing: border-box;
 }
 
+.jusc {
+  .flex();
+  justify-content: center;
+}
+
+.alic-jusc {
+  .jusc();
+  align-items: center;
+}
+
+.bfc {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/*
+ 单行文本溢出
+*/
+.text-single-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*
+ 多行文本溢出
+ 调用示例
+ .text{
+  .overflow(@line:3);
+}
+*/
+.overflow(@line) when (isnumber(@line)) {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @line;
+  overflow: hidden;
+}
